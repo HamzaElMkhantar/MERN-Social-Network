@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch , connect, useSelector } from 'react-redux'
 import { createUser } from '../redux/actions/userAction';
 import { Navigate } from 'react-router-dom';
+import userTypes from '../redux/types/userType';
 
 
 export default function Register() {
@@ -17,29 +18,32 @@ export default function Register() {
 
     const [error , setError] = useState(null) ;
     const [succes , setSucces] = useState(false)
-    const dispatch = useDispatch() ;
-    const handleInputChange = (e) => {
-        setUser({
-            ...user ,
-            [e.target.name] : e.target.value
-        })
-    }
+    const dispatch = useDispatch() ;  
+    
+
     useEffect( () => {
         if(userError && userError !== null) {
             setError(userError)
         }
         if(userSucces){
             setSucces(userSucces)
-            dispatch({type:"TOGGEL_SUCCES"})
+            dispatch({type:"TOGGEL_SUCCES"}) 
         }
     } , [userError , userSucces])
 
     const showError = () => {
-        return userError && <div className='alert alert-danger'>email already exist</div>
+        return error && <div className='alert alert-danger'>{error}</div>
     }
 
     const redirectUser = () => {
         return succes && <Navigate to='/login' />
+    }
+
+    const handleInputChange = (e) => {
+        setUser({
+            ...user ,
+            [e.target.name] : e.target.value
+        })
     }
 
     const handleFormSubmit = (e) => {
@@ -88,6 +92,7 @@ export default function Register() {
                     </div>
                     <div className='form-group mx-auto mt-3'>
                         <button 
+                            onClick={ () => dispatch()}
                             style={ {
                                 width : '120px' ,
                                 border: '0',

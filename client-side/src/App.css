@@ -4,42 +4,140 @@
   margin : 0 ;
 
 }
-
-.App {
-  text-align: center;
+.navbar {
+  border-bottom: 1px solid rgba(2, 7, 70, 0.2);
+  position: fixed;
+  width: 100%;
+  top: 0 ;
+  z-index: 999;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.profiles-list {
+  margin-top: 100px;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.nav-container{
+  /* background-color: red; */
   display: flex;
-  flex-direction: column;
+  position: relative;
+  height: 100%;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  max-height: 7vh;
+}
+li {
+  list-style: none;
+}
+.dorpdownList {
+  background-color: rgb(224, 225, 246);
+  border: 2px solid rgb(3, 21, 74);
+  position: absolute;
+  right:-35px;
+  top : 55px ;
+  padding: 5px;
+  border-radius: 5px;
+  color: rgb(36, 36, 35);
+  font-size: 16px;
+
+ visibility: hidden;
+}
+
+.userName , .navlink {
+  background-color: rgb(252, 252, 252);
+  padding: 5px 10px;
+  border-radius: 5px;
+  border:2px solid rgb(12, 1, 59);
+  transition: 0.7s all ease;
+
+}
+.navlink:hover {
+  background-color: rgb(15, 28, 108);
   color: white;
+
+}
+.userAvatar  {
+  cursor: pointer;
 }
 
-.App-link {
-  color: #61dafb;
+.userOption {
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: 35px;
+  font-size: 25px !important;
+  background-color: rgb(14, 6, 76);
+  border-radius: 5px;
+  padding: 2px;
+  color: beige;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+body:has(.userOption:hover) .dorpdownList {
+  visibility: visible;
+}
+body:has(.dorpdownList:hover) .dorpdownList {
+  visibility: visible;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  /* background-color: red; */
+  border: 2px solid rgb(22, 9, 68);
+  padding: 10px;
+  color: rgb(23, 6, 68);
+  border-radius: 10px;
+}
+.listGroup {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  grid-gap: 10px;
+}
+.listGroupItem {
+  width: 370px !important;
+  height: 130px ;
+  margin-bottom: 10px;
+  overflow: hidden;
+  border: 1px solid lightgray;
+  border-radius: 10px;
+
+
+}
+
+.listGroupItemContent {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+
+}
+
+.listGroupItemContent > .imageList {
+  height: 100% !important;
+  min-width: 100px !important;
+  width: 150px !important;
+  border-right: 1px solid lightgray;
+}
+.listGroupItemContent > .img {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.listGroupItemContent > div {
+  width: 100%;
+  height: 100% !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.listGroupItemContent > .listGroupItemContent-item > h2 {
+  font-size: 25px;
+}
+.listGroupItemContent > .listGroupItemContent-item  {
+  padding: 10px ;
+  background-color: rgb(240, 240, 240);
+}
+
+.listGroupItemContent > div > svg > path {
+  font-size: 25px;
+  color: rgb(8, 4, 84);
+  
 }

@@ -26,9 +26,9 @@ const singin = (req , res) => {
                     expire : new Date() + 9999
                 })
                 
-                res.json({msg : "token succ.." , token , user })
                 user.password = undefined ;
-                return res.send({
+                // res.json({msg : "token succ.." , user , token })
+                return res.json({
                     token ,
                     user
                 })

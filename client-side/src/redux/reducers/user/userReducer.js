@@ -16,29 +16,33 @@ const userReducer = ( state = initialState  , action) => {
         case userTypes.AUTH :
             return {
                 ...state ,
-                users : action.payload
+                currentUser : action.payload ,
+                userSucces : true,
+                userError : null
             }
         case userTypes.REGISTER :
             return {
-                ...state ,
-                userSucces : !state.userSucces 
+                ...state , 
+                userSucces : !state.userSucces
             }
         case userTypes.CHECK_AUTH :
             return {
                 ...state ,
-                users : action.payload
+                currentUser : action.payload   
+                // userSucces : !state.userSucces
             }
         case userTypes.SINGOUT :
             return {
                 ...state ,
-                users : action.payload
+                currentUser : null ,
+                userSucces : false
             } 
         case userTypes.UPDATE :
             return {
-                state 
+                state ,
             }
         case userTypes.DELETE :
-                const updatedUsers = state.users.filter(user => user._id !== user.payload.id)
+                const updatedUsers = state.users.filter(user => user._id !== user.payload._id)
             return {
                 ...state ,
                 users : updatedUsers
@@ -56,11 +60,11 @@ const userReducer = ( state = initialState  , action) => {
                 ...state ,
                 userError : action.payload
             }
-            case "TOGGEL_SUCCES" :
-                return {
-                    ...state ,
-                    userSucces : !state.userSucces 
-                }
+        case "TOGGEL_SUCCES" :
+            return {
+                ...state ,
+                userSucces : !state.userSucces
+            }
 
         default :
             return state ;

@@ -69,7 +69,7 @@ const getAllUsers = (req , res) => {
 
 
     User.find((err , users) => {
-        if(err) res.json({error : err})
+        if(err) return res.json({error : err})
         
         if(!users){
             res.json({message : "user not found"})
