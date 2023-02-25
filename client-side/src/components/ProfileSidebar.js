@@ -4,21 +4,31 @@ import { checkAuth, isLogged } from '../hepers/auth';
 import FollowButton from './FollowButton';
 
 
-function ProfileSidebar({user , userId , following , handleButtonClick}) {
+function ProfileSidebar({user , userId , following , handleButtonClick }) {
 
-    const recentItem = (topic) => {
-        return(
-            <div className='sidebar-recentItem'>
-                <span className='sidebar-hashtag'>#</span>
-                <p className='sidebar0topic'>{topic}</p>
-            </div>
-        )
-    }
+    
 
     const formattedDate = user ? new Date(user.createdAt).toLocaleDateString('en-US', {month: '2-digit', day: '2-digit', year: 'numeric'}) : null;
     
     const jwt = isLogged()
 
+    const recentItem = (id , topic) => {
+        return(
+          <Link to={`/user/${id}`}>
+             <div   className='sidebar-recentItem d-flex align-items-center'>
+                  {<img style={{
+                    width:'50px' ,
+                    height:'50px' ,
+                    borderRadius:'50%'
+                  }} className='sidebar-hashtag' src={`http://localhost:4500/api/user/photo/${id}`} alt="profile-img" />}
+                  <p className='sidebar0topic'>{topic}</p>
+              </div>
+          </Link>
+        )
+      }
+
+      
+      const followersList = user ? user.followers.map(follow => recentItem(follow._id , follow.name)) : null
     
   return (
 
@@ -59,13 +69,12 @@ function ProfileSidebar({user , userId , following , handleButtonClick}) {
             <span style={{color:'gray' , fontSize:'11px'}} className='text-center'> Created At : {user && formattedDate } </span>
         </div>
         <div className='sidebar-buttom'>
-            <h2>Hashtag ternds</h2>
-            <div>
-            {recentItem("react js")}
-            {recentItem("Programming")}
-            {recentItem("Redux")}
-            {recentItem("Software Engineer")}
-            {recentItem("react js")}
+            <h2>Followers</h2>
+            <div style={{fontSize:'10px' , textAlign:'center'}}>
+                    {
+                        followersList &&  followersList.length  > 0 ? followersList : "there no followers" 
+
+                    }
             </div>
             
         </div>

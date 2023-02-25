@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { Link, Navigate, useParams } from 'react-router-dom'
 import { checkAuth, isLogged } from '../hepers/auth'
 import { getUser } from '../redux/actions/userAction'
 import InputOption from './InputOption'
@@ -31,7 +31,7 @@ function Profile() {
     }
 
     getProfile() ;
-  } , []) ;
+  } , [userId]) ;
 
   const checkFollow = (user) => {
     const match = user.followers.find(follower => {
@@ -66,9 +66,34 @@ function Profile() {
   const showError = () => {
     return error && <div style={{width:'100%'}} className='alert px-5 alert-danger mx-auto text-center'>{error}</div>
 }
+
+
+
+
+const recentItem = (userId , topic) => {
+  return(
+    <Link to={`/user/${userId}`}>
+       <div   className='sidebar-recentItem d-flex align-items-center'>
+            {<img style={{
+              width:'50px' ,
+              height:'50px' ,
+              borderRadius:'50%'
+            }} className='sidebar-hashtag' src={`http://localhost:4500/api/user/photo/${userId}`} alt="profile-img" />}
+            <p className='sidebar0topic'>{topic}</p>
+        </div>
+    </Link>
+  )
+}
+
+ const followingList = user ? user.following.map(follow => recentItem(follow._id , follow.name)) : null
+
+
+
+
+ 
   return (
 
-    <div style={{marginTop: '90px'}} 
+    <div style={{marginTop: '90px' , position:'relative'}} 
     className='container' >
         {
           error ? showError() : 
@@ -119,8 +144,19 @@ function Profile() {
                 handleButtonClick={handleButtonClick}
                 userId={userId} 
                 user={user && user}
-                following={following}  />
+                following={following} />
         }
+        <div className='follow-sidebar'>
+            <h2>Following</h2>
+            <hr />
+            <div style={{textAlign:'center' , fontSize:'13px !important' }} className='follow-sidebar-content'>
+              {
+                followingList && followingList.length  > 0 ? followingList : "there no following " 
+              }
+          
+            </div>
+            
+        </div>
         
     
     </div>
