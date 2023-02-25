@@ -34,7 +34,7 @@ router.post("/api/auth/singin" , singin ) ;
 router.get("/api/auth/singout" , singOut ) ;
 
 //  routes for getting , updating or deleting users
-router.get("/api/users"  , getAllUsers ) ;
+router.get("/api/users"  , requireSingin , getAllUsers ) ;
 router.put("/api/users/:userId" , requireSingin , hasAuthorization , updateUser ) ;
 router.get("/api/user/photo/:userId"  ,  getUserPhoto )
 router.delete("/api/users/:userId" , requireSingin , hasAuthorization , deleteUser ) ;

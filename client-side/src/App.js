@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 
 import { authCheck } from './redux/actions/userAction';
 import User from './pages/Users';
+import Profile from './components/Profile'
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
         <Route path='/register' exact element={<Register />} />
         <Route path='/login' exact element={<Login />} />
         <Route path='/users' exact element={<User />} />
+        <Route path='/user/:userId' exact element={<Profile />} />
       </Routes>
 
 

@@ -53,7 +53,7 @@ export default function Register() {
     }
 
   return (
-    <div className='container'>
+    <div style={{marginTop: '100px'}} className='container'>
         <div className='row my-5'>
             <div className='col-md-6 mx-auto'>
             {showError()}

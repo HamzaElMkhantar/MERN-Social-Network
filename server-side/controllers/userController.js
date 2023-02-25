@@ -36,10 +36,8 @@ const getUserById = (req , res , next , id) => {
         .populate('following' , "_id name")
         .populate('followers' , "_id name")
         .exec((err , user) => {
-            if (err) {
-                res.json({ error: err });
-            } else if (!user) {
-                res.json({ error: 'User not found' });
+            if (err || !user) {
+               return res.json({ error: 'User not found' });
             } else {
                 req.profile = user;
                 next();
@@ -52,9 +50,9 @@ const getUser = (req , res) => {
 
     if (req.profile) {    
         req.profile.password = undefined;
-        res.json(req.profile);
+       return res.json(req.profile);
     }else {
-        res.json({ error: 'User not found' });
+       return res.json({ error: 'User not found' });
     }
     
 }
@@ -72,12 +70,12 @@ const getAllUsers = (req , res) => {
         if(err) return res.json({error : err})
         
         if(!users){
-            res.json({message : "user not found"})
+           return res.json({message : "user not found"})
         }else {
             
-            res.json(users)
+           return res.json(users)
         }
-    }).select("name email about image createdAt")
+    }).select("name email about image createdAt following followers")
 }
 
 const updateUser = (req , res) => {
@@ -131,7 +129,7 @@ const addFollowing = (req , res , next) => {
             {$push : {following : followId}} , 
             {new : true} , 
             (err , result) => {
-                if(err) res.json({error : err})
+                if(err)  res.json({error : err})
 
         next();
     })
@@ -149,24 +147,24 @@ const addFollowers = (req , res) => {
         .populate("following" , "_id name ")
         .populate("followers" , "_id name ")
         .exec((err , result) => {
-            if(err) res.json({error : err}) ;
+            if(err)  res.json({error : err}) ;
             console.log(result)
-            result.password = undefined ;
-            result.image = undefined ;
 
-            res.json(result)
+            // result.password = undefined ;
+            // result.image = undefined ;
+             res.json(result)
         })
 }
 
 const removeFollowing = (req , res , next) => {
     let userId = req.body.userId ;
-    let unfollowId = req.body.unfollowId ;
+    let unfollowId = req.body.followId ;
     User.findByIdAndUpdate(
             userId , 
             {$pull : {following : unfollowId}} , 
             {new : true}  , 
             (err , result) => {
-                if(err) res.json({error : err})
+                if(err) return res.json({error : err})
 
         next() ;
     })
@@ -174,7 +172,7 @@ const removeFollowing = (req , res , next) => {
 
 const removeFollowers = (req , res) => {
     let userId = req.body.userId ;
-    let unfollowId = req.body.unfollowId ;
+    let unfollowId = req.body.followId ;
 
     User.findByIdAndUpdate( 
         unfollowId , 
@@ -184,12 +182,12 @@ const removeFollowers = (req , res) => {
     .populate("following" , "_id name ")
     .populate("followers" , "_id name ")
     .exec((err , result) => {
-        if(err) res.json({error : err}) ;
+        if(err) return res.json({error : err}) ;
         console.log(result)
-        result.password = undefined ;
-        result.image = undefined ;
+        // result.password = undefined ;
+        // result.image = undefined ;
 
-        res.json(result)
+         res.json(result)
     })
 }
 

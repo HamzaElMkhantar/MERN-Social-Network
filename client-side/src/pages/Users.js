@@ -12,16 +12,15 @@ function Users() {
   const {users , userError  } = useSelector(state => state.user)
   const dispatch = useDispatch() ;
 
-// const jwt = isLogged() ;
+const jwt = isLogged() ;
 
 // console.log(jwt.token)
-
   useEffect( () => {
     if(userError && userError !== null){
       setError(userError)
     }
 
-    dispatch(getAllUsers())
+    dispatch(getAllUsers(jwt.token))
   } , [dispatch])
   
 

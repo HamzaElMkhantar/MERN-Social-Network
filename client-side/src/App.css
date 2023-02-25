@@ -2,7 +2,10 @@
   box-sizing : border-box ;
   padding : 0 ;
   margin : 0 ;
-
+  
+}
+body{
+  background-image: linear-gradient(90deg, #ededed, #ebebf1, #e8e9f6, #e3e7fa, #dde6ff);
 }
 .navbar {
   border-bottom: 1px solid rgba(2, 7, 70, 0.2);
@@ -10,6 +13,8 @@
   width: 100%;
   top: 0 ;
   z-index: 999;
+  /* border-radius: 9px; */
+
 }
 .profiles-list {
   margin-top: 100px;
@@ -140,4 +145,310 @@ body:has(.dorpdownList:hover) .dorpdownList {
   font-size: 25px;
   color: rgb(8, 4, 84);
   
+}
+
+/* ------------- profile style ----------- */
+
+.user-header-container {
+    display: flex; 
+    flex-wrap: wrap;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    /* background-color: red; */
+
+}
+
+.user-header-image-container {
+  width: 250px;
+  height: 210px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-right: 5px;
+  border: 1px solid rgb(234, 234, 234);
+}
+.user-header-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.user-header-info-container {
+  background-color: rgb(246, 246, 246) ; 
+  height: 210px;
+  width: calc(100% - 255px);
+  min-width: 400px;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 30px;
+  border: 1px solid rgb(234, 234, 234);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+}
+
+.user-header-name{
+  font-size: 30px;
+  /* margin-bottom: 10px; */
+  color: rgb(3, 15, 68);
+  font-weight: 700;
+}
+.user-header-email {
+  font-size: 22px;
+  /* margin-bottom: 10px; */
+  color: rgb(4, 18, 83);
+  font-weight: 500;
+}
+
+.user-header-info-container-item {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.createdAt {
+  text-align: center;
+  background-color: rgb(45, 73, 106);
+  color: lightgray;
+  font-size: 16px;
+  border-radius: 5px;
+  width: 80%;
+}
+.folloNum{
+  background-color:rgb(45, 73, 106);
+  margin-bottom: 5px;
+  padding: 5px;
+  font-size: 20px;
+  border-radius: 5px;
+  width: 120px;
+  color: lightgray;
+  text-align: center;
+}
+
+
+/* ------------ profile sidebar ----------- */
+
+.sidebar {
+  margin-top: 5px;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+
+
+
+}
+
+/* sidebar top  */
+
+.sidebar-top {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  background-color: white;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border: 1px solid lightgray;
+  overflow: hidden;
+}
+.sidebar-top > img {
+  width: 100%;
+  height: 60px;
+  margin-bottom: -35px;
+  object-fit: cover;
+}
+.sidebar-top > .sidebar-avatar {
+  border: 2px solid white;
+  width: 70px;
+  height: 70px;
+}
+
+.sidebar-top > h2 {
+  font-size: 16px;
+  margin-top: 8px;
+
+}
+.sidebar-top > h4 {
+  font-size: 13px;
+  font-weight: 600;
+  color: gray;
+  margin-top: 6px;
+  
+}
+
+.sidebar-top-stats {
+  width: 100%;
+  margin-top: 8px;
+  border-top: 0.5px solid lightgray;
+  margin-top: 8px;
+  padding:5px;
+  padding-top: 10px;
+ margin-top: 20px;
+}
+
+.sidebar-top-stats > .stat {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 5px;
+}
+
+.stat > h4 {
+  font-size: 12px;
+  font-weight: 500;
+  color: gray;
+}
+.stat > p {
+  font-size: 12px;
+  font-weight: 600;
+  color: #0088d1;
+}
+
+/* sidebar bottom  */
+.sidebar-buttom {
+  background-color: white;
+  padding: 5px 0px;
+  border-radius: 10px;
+  border: 1px solid lightgray;
+}
+.sidebar-buttom > div {
+  padding: 10px;
+}
+.sidebar-buttom > h2 {
+  text-align: center;
+  border-bottom: 0.5px solid lightgray;
+  padding-bottom: 10px;
+}
+
+.sidebar-recentItem {
+  display: flex;
+  margin-bottom: 5px;
+  padding: 5px;
+  color: gray;
+  font-size: 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.sidebar-recentItem > .sidebar-hashtag {
+  margin-right: 5px;
+}
+.sidebar-recentItem:hover {
+  background-color: whitesmoke;
+  color: black;
+}
+
+/* -------- feed style ----- */
+.feedComp {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* margin-left: 21%; */
+  width: 100%;
+  /* background-color: red; */
+}
+
+.feed{
+  background-color: white;
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  border: 1px solid lightgray;
+
+}
+
+.monAvatar{
+  cursor: pointer;
+  width: 60px !important;
+  height: 60px !important;
+  object-fit: cover;
+  margin-right: 15px;
+  border-radius: 50%;
+  border:  1px solid lightgray;
+}
+
+.feed-inputConteiner {
+  display: flex;
+  align-items: center;
+}
+.feed-form {
+  display: flex;
+  align-items: center;
+  /* background-color: red; */
+  width: 100%;
+  border: 1.5px solid rgb(164, 163, 163);
+  border-radius: 30px;
+  padding:0 10px;
+}
+
+.feed-inputConteiner form {
+  /* background-color: red; */
+  height: 60px;
+  display: flex;
+  align-items: center;
+  width: 95%;
+}
+.feed-inputConteiner form  button {
+  border-radius: 30px;
+  border: 0;
+  height: 40px;
+  width: 70px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  background-color: rgb(5, 33, 79);
+  color: rgb(230, 246, 252);
+}
+.feed-inputConteiner form > input {
+  width: 100%;
+  outline: none;
+  border: none;
+  height: 90%;
+  font-size: 18px ;
+  padding: 0 15px;
+}
+
+.feed-inputOption {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+}
+
+/* inputOption */
+
+.inputOption {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.inputOption:hover {
+  background-color: whitesmoke;
+}
+
+.inputOption > h4{
+  color: rgb(111, 111, 111);
+  margin-left: 7px;
+  font-size: 15px;
+}
+
+.followButton {
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.followingButton {
+  background-color: rgb(26, 19, 124);
+  padding: 5px 15px;
+  border-radius: 10px;
+  color: rgb(244, 243, 243);
 }

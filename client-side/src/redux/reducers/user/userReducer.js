@@ -23,7 +23,7 @@ const userReducer = ( state = initialState  , action) => {
         case userTypes.REGISTER :
             return {
                 ...state , 
-                userSucces : !state.userSucces
+                userSucces : true
             }
         case userTypes.CHECK_AUTH :
             return {

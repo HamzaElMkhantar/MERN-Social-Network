@@ -10,7 +10,8 @@ function Nabvbar() {
   const navigate = useNavigate() ;
   const dispatch = useDispatch() ;
 
-  const {currentUser} = useSelector(state => state.user)
+  const {currentUser } = useSelector(state => state.user)
+
 
 
   const handleLogOut = () => {
@@ -74,19 +75,17 @@ function Nabvbar() {
                               alignItems:'center'}} 
                       className='d-flex'>
                  { 
-                  // currentUser ? 
-                  // <Link to={`/${currentUser.user.user.name}/${currentUser.user.user._id}`} >
-                  //     {currentUser ? currentUser.user.user.name : ''}
-                  // </Link>
-                  // : ''
+                  
                 }
                     {
                       currentUser ? 
-                      <img className="inline-block h-12 w-12 rounded-full ring-2 ring-white" 
-                           src={AVATAR} 
-                           alt="{user.handle}"/> 
+                      (<Link className='d-flex justify-content-center align-items-center'  to={currentUser && `/user/${currentUser && currentUser.user.user._id}`} >
+                          <img className="inline-block h-12 w-12 rounded-full ring-2 ring-white" 
+                              src={`http://localhost:4500/api/user/photo/${currentUser && currentUser.user.user._id}`} 
+                              alt="{user.handle}"/> 
+                      </Link>)
                       :
-                      '' 
+                      null 
                     }
                   
               

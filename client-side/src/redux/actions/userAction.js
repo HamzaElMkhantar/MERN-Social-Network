@@ -1,6 +1,7 @@
 import userTypes from "../types/userType";
 import axios from 'axios' ;
 import {isLogged, saveUserToLocalStorage} from '../../hepers/auth'
+import { useParams } from "react-router-dom";
 
 
 export const getAllUsers = (token) => {
@@ -13,7 +14,7 @@ export const getAllUsers = (token) => {
     }
     return dispatch => {
         axios
-            .get("http://localhost:4500/api/users")
+            .get("http://localhost:4500/api/users" , config)
             .then( res => {
                 if(res.data.error){
                     dispatch({
@@ -81,4 +82,63 @@ export const authCheck = () => {
             payload : isLogged() ? { user : isLogged() } : null 
         })
     }
+}
+
+
+
+
+
+export const getUser = (userId , token) => {
+    const config = {
+        headers : {
+            Authorization : `Bearer ${token}`
+        }
+
+    }
+    return axios
+            .get(`http://localhost:4500/api/user/${userId}` , config)
+                .then(res => {
+                    if(res.data.error){
+                        return {error : res.data.error}
+                    }else {
+                        return {data :res.data}
+                    }
+                }).catch(err => console.log(err)) ;
+    
+}
+
+export const subscribe = (followId , userId , token) => {
+    const config = {
+        headers : {
+            Authorization : `Bearer ${token}`
+        }
+
+    }
+    return axios
+            .put(`http://localhost:4500/api/users/add/follow` , {userId , followId} , config )
+            .then(res => {
+                if(res.data.error){
+                    return {error : res.data.error}
+                }else{
+                    return {data : res.data}
+                }
+            }).catch(err => console.log(err))
+}
+
+export const unSubscibe = (followId , userId , token) => {
+    const config = {
+        headers : {
+            Authorization : `bearer ${token}`
+        }
+    }
+
+    return axios
+            .put(`http://localhost:4500/api/users/remove/follow` , {userId , followId} , config )
+            .then(res => {
+                if(res.data.error){
+                    return{error : res.data.error }
+                }else{
+                    return {data : res.data }
+                }
+            }).catch(err => console.log(err))
 }

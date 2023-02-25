@@ -16,11 +16,14 @@ export default function Register() {
 
     const {userError , userSucces} = useSelector(state => state.user)
 
-
     const [error , setError] = useState(null) ;
     const [succes , setSucces] = useState(false)
+
+
+
     const dispatch = useDispatch() ;
 
+    console.log(error)
     
     useEffect( () => {
         if(userError && userError !== null) {
@@ -47,6 +50,8 @@ export default function Register() {
         return succes && <Navigate to='/' />
     }
 
+    console.log(succes && succes)
+
     const handleFormSubmit = (e) => {
         e.preventDefault() ;
 
@@ -54,7 +59,7 @@ export default function Register() {
     }
 
   return (
-    <div className='container'>
+    <div style={{marginTop: '100px'}} className='container'>
         <div className='row my-5'>
             <div className='col-md-6 mx-auto'>
             { showError()}
