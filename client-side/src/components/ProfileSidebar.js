@@ -35,10 +35,13 @@ function ProfileSidebar({user , userId , following , handleButtonClick }) {
     <div className='sidebar'>
     {checkAuth(userId) ?
         (<div style={{justifyContent:'space-around' , marginBottom:'10px'}} className='d-flex'>
+            <Link to={`/edite/${userId}`} >
                 <button style={{backgroundColor:'RGB(19 , 151 , 0 , 0.5)' , 
                                 borderRadius:'5px' , 
                                 padding:'1px 10px' , 
                                 marginLeft:'5px' }}  className=''>edite</button>
+            </Link>
+
                 <button style={{backgroundColor:'RGB(136 ,28 ,21, 0.5)' , 
                 borderRadius:'5px' , 
                 padding:'1px 10px' , 
