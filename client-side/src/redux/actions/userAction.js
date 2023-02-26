@@ -79,7 +79,7 @@ export const authCheck = () => {
     return dispatch => {
         dispatch({
             type : userTypes.CHECK_AUTH ,
-            payload : isLogged() ? { user : isLogged() } : null 
+            payload : isLogged() ? isLogged() : null 
         })
     }
 }
@@ -141,4 +141,30 @@ export const unSubscibe = (followId , userId , token) => {
                     return {data : res.data }
                 }
             }).catch(err => console.log(err))
+}
+
+export const updateUser = (user , userId ,token ) => {
+    const config = {
+        headers : {
+            Authorization : `bearer ${token}`
+        }
+    }
+    return (dispatch) => {
+        axios
+            .put(`http://localhost:4500/api/users/${userId}` , user , config)
+            .then(res => {
+                if(res.data.error){
+                    dispatch({
+                        type : "USER_ERROR" ,
+                        payload : res.data.error
+                    })
+                }else {
+                    dispatch({
+                        type : userTypes.UPDATE ,
+                        payload : res.data
+                    })
+                }
+            })
+            .catch(err => console.log(err)) ;
+    }
 }

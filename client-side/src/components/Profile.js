@@ -30,16 +30,18 @@ function Profile() {
       }
     }
 
+    const checkFollow = (user) => {
+      const match = user.followers.find(follower => {
+          return  follower._id === jwt.user._id
+      })
+  
+      return match ;
+    }
+
     getProfile() ;
-  } , [userId]) ;
+  } , [userId , jwt]) ;
 
-  const checkFollow = (user) => {
-    const match = user.followers.find(follower => {
-        return  follower._id === jwt.user._id
-    })
-
-    return match ;
-  }
+  
 
   const  handleButtonClick = (user) => {
     setUser(user)
@@ -64,28 +66,32 @@ function Profile() {
                     </svg>
 
   const showError = () => {
-    return error && <div style={{width:'100%'}} className='alert px-5 alert-danger mx-auto text-center'>{error}</div>
+  
+    return !user ? error && <div style={{width:'100%'}} className='alert px-5 alert-danger mx-auto text-center'>{error}</div> : ''
 }
 
 
 
 
-const recentItem = (userId , topic) => {
+const recentItem = (index , userId , topic) => {
   return(
-    <Link to={`/user/${userId}`}>
+    <Link key={index} to={`/user/${userId}`}>
        <div   className='sidebar-recentItem d-flex align-items-center'>
             {<img style={{
-              width:'50px' ,
-              height:'50px' ,
-              borderRadius:'50%'
-            }} className='sidebar-hashtag' src={`http://localhost:4500/api/user/photo/${userId}`} alt="profile-img" />}
-            <p className='sidebar0topic'>{topic}</p>
+                        width:'50px' ,
+                        height:'50px' ,
+                        borderRadius:'50%'
+                      }} 
+                      className='sidebar-hashtag' 
+                      src={`http://localhost:4500/api/user/photo/${userId}?&{new Date().getTime()}`} 
+                      alt={topic.name} />}
+            <p className='sidebar0topic'>{topic && topic.name}</p>
         </div>
     </Link>
   )
 }
 
- const followingList = user ? user.following.map(follow => recentItem(follow._id , follow.name)) : null
+ const followingList = user ? user.following.map((follow , index) => recentItem(index , follow._id , follow)) : null
 
 
 

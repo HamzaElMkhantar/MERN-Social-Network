@@ -24,7 +24,7 @@ function App() {
 
   return (
     <BrowserRouter >
-      <Nabvbar currentUser={currentUser} />
+      <Nabvbar currentUser={currentUser && currentUser} />
       <Routes>
         <Route path='/' exact element={<Home/>} />
         <Route path='/register' exact element={<Register />} />

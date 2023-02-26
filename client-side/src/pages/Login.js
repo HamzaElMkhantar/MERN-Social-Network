@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch , connect, useSelector } from 'react-redux'
 import { login } from '../redux/actions/userAction';
-import { Navigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import userTypes from '../redux/types/userType';
 // import { useHistory } from 'react-router-dom';
 
@@ -31,9 +31,9 @@ export default function Register() {
         }
         if(userSucces){
             setSucces(userSucces)
-            dispatch({ type: "TOGGEL_SUCCES" })
+            dispatch({ type: userTypes.AUTH })
         }
-    } , [userError , userSucces])
+    } , [userError , userSucces , dispatch])
     
     const handleInputChange = (e) => {
         setUser({
@@ -46,8 +46,10 @@ export default function Register() {
             return userError && <div className='alert alert-danger text-center'>{userError}</div>
     }
 
+    const Navigate = useNavigate()
     const redirectUser = () => {
-        return succes && <Navigate to='/' />
+        return ( succes &&
+        Navigate('/') )
     }
 
     console.log(succes && succes)
@@ -89,6 +91,7 @@ export default function Register() {
                     </div>
                     <div className='form-group mx-auto mt-3'>
                         <button
+                        
                             
                             style={ {
                                 width : '120px' ,

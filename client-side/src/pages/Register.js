@@ -29,7 +29,7 @@ export default function Register() {
             setSucces(userSucces)
             dispatch({type:"TOGGEL_SUCCES"}) 
         }
-    } , [userError , userSucces])
+    } , [userError , userSucces , dispatch])
 
     const showError = () => {
         return error && <div className='alert alert-danger'>{error}</div>

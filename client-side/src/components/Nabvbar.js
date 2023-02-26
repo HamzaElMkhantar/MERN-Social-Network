@@ -79,9 +79,9 @@ function Nabvbar() {
                 }
                     {
                       currentUser ? 
-                      (<Link className='d-flex justify-content-center align-items-center'  to={currentUser && `/user/${currentUser && currentUser.user.user._id}`} >
+                      (<Link className='d-flex justify-content-center align-items-center'  to={currentUser && currentUser.user && `/user/${currentUser.user && currentUser.user._id}`} >
                           <img className="inline-block h-12 w-12 rounded-full ring-2 ring-white" 
-                              src={`http://localhost:4500/api/user/photo/${currentUser && currentUser.user.user._id}`} 
+                              src={currentUser && currentUser.user && `http://localhost:4500/api/user/photo/${currentUser && currentUser.user &&  currentUser.user._id}`} 
                               alt="{user.handle}"/> 
                       </Link>)
                       :

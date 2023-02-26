@@ -28,8 +28,8 @@ const userReducer = ( state = initialState  , action) => {
         case userTypes.CHECK_AUTH :
             return {
                 ...state ,
-                currentUser : action.payload   
-                // userSucces : !state.userSucces
+                currentUser : action.payload   ,
+                userSucces : true
             }
         case userTypes.SINGOUT :
             return {
@@ -38,8 +38,13 @@ const userReducer = ( state = initialState  , action) => {
                 userSucces : false
             } 
         case userTypes.UPDATE :
+            const jwt = JSON.parse(localStorage.getItem("jwt")) ;
+            const newJwt = {...jwt , user : action.payload} 
+            localStorage.setItem("jwt" , JSON.stringify(newJwt)) ;
             return {
-                state ,
+                ...state ,
+                currentUser : {...state.currentUser , user : action.payload} ,
+                // userSucces : true
             }
         case userTypes.DELETE :
                 const updatedUsers = state.users.filter(user => user._id !== user.payload._id)
@@ -63,7 +68,7 @@ const userReducer = ( state = initialState  , action) => {
         case "TOGGEL_SUCCES" :
             return {
                 ...state ,
-                userSucces : !state.userSucces
+                // userSucces : !state.userSucces
             }
 
         default :

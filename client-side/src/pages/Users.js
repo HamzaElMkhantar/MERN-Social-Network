@@ -20,8 +20,8 @@ const jwt = isLogged() ;
       setError(userError)
     }
 
-    dispatch(getAllUsers(jwt.token))
-  } , [dispatch])
+    dispatch(getAllUsers(jwt && jwt.token))
+  } , [dispatch , jwt , userError])
   
 
 
@@ -45,11 +45,12 @@ const jwt = isLogged() ;
                   "Loading..." :
                   
                   users.map((user , index) => (
-                    <li className='listGroupItem'>
+                    <li key={index} className='listGroupItem'>
                         <Link to={`/user/${user._id}`} >
                             <div className='listGroupItemContent'>
                             <div className='imageList'>
                                 <img className='img'  
+                                     alt={user && user.name}
                                     src={`http://localhost:4500/api/user/photo/${user._id}`} />
                             </div>
                                 <div className='listGroupItemContent-item'>

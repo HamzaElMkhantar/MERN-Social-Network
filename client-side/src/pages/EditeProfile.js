@@ -1,74 +1,161 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch , connect, useSelector } from 'react-redux'
+import React, { useCallback, useEffect, useState , memo} from 'react'
+import { useDispatch , useSelector } from 'react-redux'
 // import { createUser } from '../redux/actions/userAction';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { checkAuth, isLogged } from '../hepers/auth';
+import { getUser, updateUser } from '../redux/actions/userAction';
 import userTypes from '../redux/types/userType';
 
 
-export default function EditeProfile() {
+const  EditeProfile = memo(() =>  {
 
     const {userId} = useParams() ;
 
     const [user , setUser] = useState({
         name : '' ,
         email : '' ,
-        password : ''
+        password : '' ,
+        about : '' ,
+        image : ''
     })
 
-    const {userError , userSucces} = useSelector(state => state.user)
+    const userData = new FormData();
 
 
     const [error , setError] = useState(null) ;
     const [succes , setSucces] = useState(false)
     const dispatch = useDispatch() ;  
     
+    const jwt = isLogged() ;
+
+    const {userError , userSucces} = useSelector(state => state.user)
+    console.log(userError)
+    console.log(userSucces)
+    console.log(succes)
+    console.log(user)
+    console.log(jwt)
+    console.log(userId)
+    
+    let navigate = useNavigate()
 
     useEffect( () => {
-        if(userError && userError !== null) {
-            setError(userError)
+        const getProfile = async () => {
+            const userData = await getUser(userId , jwt && jwt.token) ;
+            if(userData.error){
+                setError(userData.error)
+            }else {
+                setUser(userData.data)
+            }
+
         }
+        
+        getProfile() ;
+    } , [jwt , userId])
+
+    useEffect( () => {
+        
         if(userSucces){
             setSucces(userSucces)
-            dispatch({type:"TOGGEL_SUCCES"}) 
+            // dispatch({type:"TOGGEL_SUCCES"})
         }
-    } , [userError , userSucces])
+        if(userError){
+            setError(userError)
+            
+        }
+        
+    } , [userError , userSucces , dispatch])
 
-    const showError = () => {
-        return error && <div className='alert alert-danger'>{error}</div>
+   
+
+console.log('editing')
+    // const redirectUser = () => {
+    //     if(succes){
+    //         navigate(`/user/${user && user._id}`)
+    //     }
+
+    // }
+    const redirectUser = useCallback(() => {
+        if (succes) {
+          navigate(`/user/${user && user._id}`);
+        }
+      }, [succes, user, navigate]);
+    
+    if(!checkAuth(userId)){
+        navigate(`/user/${userId}`) 
+        console.log("hello updt")
     }
+    
 
-    const redirectUser = () => {
-        return succes && <Navigate to='/login' />
-    }
+    // const handleInputChange = (e) => {
+    //     const value = e.target.name === "image"
+    //                     ? e.target.files[0] : e.target.value
+    //     setUser({
+    //         ...user ,
+    //         [e.target.name] : value
+    //     })
+    // }
 
-    const handleInputChange = (e) => {
-        setUser({
-            ...user ,
-            [e.target.name] : e.target.value
-        })
-    }
+    const handleInputChange = useCallback(
+        (e) => {
+          const value =
+            e.target.name === 'image' ? e.target.files[0] : e.target.value;
+          setUser({
+            ...user,
+            [e.target.name]: value,
+          });
+        },
+        [user]
+      );
 
-    const handleFormSubmit = (e) => {
-        e.preventDefault() ;
+    // const handleFormSubmit = (e) => {
+    //     e.preventDefault() ;
+    //     user.name && userData.append("name" , user.name)
+    //     user.email && userData.append("email" , user.email)
+    //     user.password && userData.append("password" , user.password)
+    //     user.about && userData.append("about" , user.about)
+    //     user.image && userData.append("image" , user.image)
 
-        // dispatch(createUser(user))
-    }
+    //     dispatch(updateUser(userData  , userId , jwt && jwt.token))
+        
+    //     redirectUser()
+    // }
+    const handleFormSubmit = useCallback(
+        (e) => {
+          e.preventDefault();
+          const userData = new FormData();
+          user.name && userData.append('name', user.name);
+          user.email && userData.append('email', user.email);
+          user.password && userData.append('password', user.password);
+          user.about && userData.append('about', user.about);
+          user.image && userData.append('image', user.image);
+          dispatch(updateUser(userData, userId, jwt && jwt.token));
+        },
+        [user, dispatch, userId, jwt]
+      );
 
   return (
-    <div style={{marginTop: '100px'}} className='container'>
+    <div style={{paddingTop: '40px'}} className='container'>
         <div className='row my-5'>
             <div className='col-md-6 mx-auto'>
-            {showError()}
-            {redirectUser()}
+         
+           
+
                 <h3 className='card-title text-center my-4'>Update Profile</h3>
                 <form onSubmit={handleFormSubmit} className='card p-2'>
-                    <div className='form-group pt-4'>
+
+                    <div style={{width:'200px' , height:'200px'}} className='mx-auto form-group my-2'>
+                        <img 
+                            style={{width:'100%' , height:'100%'}}
+                            alt={user && user.name}
+                            src={`http://localhost:4500/api/user/photo/${userId}`} />
+                    </div>
+                    <div className='form-group py-1'>
                         <input 
                             type="text" 
                             name="name"
                             placeholder='Full Name'
                             value={user.name}
-                            required
+                            
                             onChange={e => handleInputChange(e)}
                             className="form-control"   />
                     </div>
@@ -78,7 +165,7 @@ export default function EditeProfile() {
                             name="email"
                             placeholder='Email'
                             value={user.email}
-                            required
+                            
                             onChange={e => handleInputChange(e)}
                             className="form-control"   />
                     </div>
@@ -87,8 +174,30 @@ export default function EditeProfile() {
                             type="password" 
                             name="password"
                             placeholder='Password'
-                            value={user.password}
+                            value={user.password || ""}
                             required
+                            onChange={e => handleInputChange(e)}
+                            className="form-control"   />
+                    </div>
+                    <div className='form-group pb-1'>
+                        <textarea
+                            style={{height:'150px'}}
+                            type="text" 
+                            name="about"
+                            placeholder='Bio'
+                            value={user.about}
+                            
+                            onChange={e => handleInputChange(e)}
+                            className="form-control" 
+                        ></textarea>
+                        
+                    </div>
+                    <div style={{width:'250px'}} className='mx-auto form-group pb-1'>
+                        <input 
+                            
+                            type="file" 
+                            name="image"
+                            accept='image/*'
                             onChange={e => handleInputChange(e)}
                             className="form-control"   />
                     </div>
@@ -105,10 +214,12 @@ export default function EditeProfile() {
                                 type ='submit'
                             className=''>Update</button>
                     </div>
+                    
                 </form>
             </div>
         </div>
     </div>
   )
-}
+})
 
+export default EditeProfile ;

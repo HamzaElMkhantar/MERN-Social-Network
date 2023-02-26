@@ -14,21 +14,21 @@ function ProfileSidebar({user , userId , following , handleButtonClick }) {
 
     const recentItem = (id , topic) => {
         return(
-          <Link to={`/user/${id}`}>
+          <Link key={id} to={`/user/${id}`}>
              <div   className='sidebar-recentItem d-flex align-items-center'>
                   {<img style={{
                     width:'50px' ,
                     height:'50px' ,
                     borderRadius:'50%'
-                  }} className='sidebar-hashtag' src={`http://localhost:4500/api/user/photo/${id}`} alt="profile-img" />}
-                  <p className='sidebar0topic'>{topic}</p>
+                  }} className='sidebar-hashtag' src={`http://localhost:4500/api/user/photo/${id}`} alt={topic.name} />}
+                  <p className='sidebar0topic'>{topic.name}</p>
               </div>
           </Link>
         )
       }
 
       
-      const followersList = user ? user.followers.map(follow => recentItem(follow._id , follow.name)) : null
+      const followersList = user ? user.followers.map(follow => recentItem(follow._id , follow)) : null
     
   return (
 
@@ -58,6 +58,7 @@ function ProfileSidebar({user , userId , following , handleButtonClick }) {
             <h2>{user && user.name}</h2>
         </Link>
             <h4>{user && user.email}</h4>
+            <p style={{fontSize:'12px'}} className="mt-2" >{user && user.about}</p>
 
             <div style={{marginTop:'8px'}} className='sidebar-top-stats'>
                 <div className='stat'>
