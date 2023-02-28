@@ -68,7 +68,7 @@ const userReducer = ( state = initialState  , action) => {
         case "TOGGEL_SUCCES" :
             return {
                 ...state ,
-                // userSucces : !state.userSucces
+                userSucces : !state.userSucces
             }
 
         default :

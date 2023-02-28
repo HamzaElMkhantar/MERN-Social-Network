@@ -19,8 +19,7 @@ const  EditeProfile = memo(() =>  {
         image : ''
     })
 
-    const userData = new FormData();
-
+   
 
     const [error , setError] = useState(null) ;
     const [succes , setSucces] = useState(false)
@@ -38,32 +37,48 @@ const  EditeProfile = memo(() =>  {
     
     let navigate = useNavigate()
 
-    useEffect( () => {
+    // useEffect( () => {
+    //     const getProfile = async () => {
+    //         const userData = await getUser(userId , jwt && jwt.token) ;
+    //         if(userData.error){
+    //             setError(userData.error)
+    //         }else if(userData) {
+    //             setUser(userData.data)
+    //             setSucces(true)
+    //         }
+
+    //     }
+        
+    //     getProfile() ;
+    // } , [jwt , userId , setSucces])
+    useEffect(() => {
         const getProfile = async () => {
-            const userData = await getUser(userId , jwt && jwt.token) ;
-            if(userData.error){
-                setError(userData.error)
-            }else {
-                setUser(userData.data)
+          if (jwt && userId) {
+            const { error, data } = await getUser(userId, jwt.token);
+            if (error) {
+              setError(error);
+            } else if (data) {
+              setUser(data);
+              setSucces(true);
             }
-
-        }
-        
-        getProfile() ;
-    } , [jwt , userId])
+          }
+        };
+      
+        getProfile();
+      }, [userId]);
 
     useEffect( () => {
         
-        if(userSucces){
-            setSucces(userSucces)
-            // dispatch({type:"TOGGEL_SUCCES"})
+        if(succes){
+            // navigate(`/user/${user && user._id}`)
+            dispatch({type:"TOGGEL_SUCCES"})
         }
-        if(userError){
+        if(error){
             setError(userError)
             
         }
         
-    } , [userError , userSucces , dispatch])
+    } , [   user , navigate , dispatch])
 
    
 
@@ -74,11 +89,11 @@ console.log('editing')
     //     }
 
     // }
-    const redirectUser = useCallback(() => {
-        if (succes) {
-          navigate(`/user/${user && user._id}`);
-        }
-      }, [succes, user, navigate]);
+    // const redirectUser = useCallback(() => {
+    //     if (succes) {
+    //       navigate(`/user/${user && user._id}`);
+    //     }
+    //   }, [succes, user, navigate]);
     
     if(!checkAuth(userId)){
         navigate(`/user/${userId}`) 
@@ -95,7 +110,7 @@ console.log('editing')
     //     })
     // }
 
-    const handleInputChange = useCallback(
+    const handleInputChange = 
         (e) => {
           const value =
             e.target.name === 'image' ? e.target.files[0] : e.target.value;
@@ -103,9 +118,7 @@ console.log('editing')
             ...user,
             [e.target.name]: value,
           });
-        },
-        [user]
-      );
+        }
 
     // const handleFormSubmit = (e) => {
     //     e.preventDefault() ;
@@ -119,7 +132,7 @@ console.log('editing')
         
     //     redirectUser()
     // }
-    const handleFormSubmit = useCallback(
+    const handleFormSubmit =
         (e) => {
           e.preventDefault();
           const userData = new FormData();
@@ -129,9 +142,7 @@ console.log('editing')
           user.about && userData.append('about', user.about);
           user.image && userData.append('image', user.image);
           dispatch(updateUser(userData, userId, jwt && jwt.token));
-        },
-        [user, dispatch, userId, jwt]
-      );
+        }
 
   return (
     <div style={{paddingTop: '40px'}} className='container'>
