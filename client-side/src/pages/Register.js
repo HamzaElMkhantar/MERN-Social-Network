@@ -13,7 +13,7 @@ export default function Register() {
         password : ''
     })
 
-    const {userError , userSucces} = useSelector(state => state.user)
+    const {userError , userSucces , LogandReg , register} = useSelector(state => state.user)
 
 
     const [error , setError] = useState(null) ;
@@ -25,9 +25,9 @@ export default function Register() {
         if(userError && userError !== null) {
             setError(userError)
         }
-        if(userSucces){
-            setSucces(userSucces)
-            dispatch({type:"TOGGEL_SUCCES"}) 
+        if(LogandReg){
+            setSucces(LogandReg)
+            // dispatch({type:"TOGGEL_SUCCES"}) 
         }
     } , [userError , userSucces , dispatch])
 
@@ -36,7 +36,7 @@ export default function Register() {
     }
 
     const redirectUser = () => {
-        return succes && <Navigate to='/login' />
+        return register && <Navigate to='/login' />
     }
 
     const handleInputChange = (e) => {

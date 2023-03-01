@@ -82,7 +82,7 @@ const updateUser = (req , res) => {
 
     let form = new formidable.IncomingForm() ;
     form.parse(req , (err , fields , files ) => {
-        if(err) res.json({error : err}) ;
+        if(err) return res.json({error : "impossible d'ajoute le fichier selectionner"}) ;
         let user = req.profile ;
         user = _.extend(user , fields)
         
@@ -92,7 +92,7 @@ const updateUser = (req , res) => {
         }
 
         user.save((err , updatedUser) => {
-            if(err) res.json({error : err})
+            if(err) return res.json({error : err})
             updatedUser.password = undefined ;
             updatedUser.image = undefined ;
             res.json(updatedUser)
@@ -103,7 +103,7 @@ const updateUser = (req , res) => {
 const deleteUser = (req , res) => {
     let user = req.profile ;
     user.remove((err , deletedUser) => {
-        if(err) res.json({error : err}) ;
+        if(err) return res.json({error : err}) ;
 
         res.json({message : "compte deleted"})
     })

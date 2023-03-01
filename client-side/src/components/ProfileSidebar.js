@@ -1,6 +1,10 @@
+
 import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom'
 import { checkAuth, isLogged } from '../hepers/auth';
+import { deleteUser } from '../redux/actions/userAction';
+import userTypes from '../redux/types/userType';
 import FollowButton from './FollowButton';
 
 
@@ -8,8 +12,12 @@ function ProfileSidebar({user , userId , following , handleButtonClick }) {
 
     
 
+
+    const disptach = useDispatch()
     const formattedDate = user ? new Date(user.createdAt).toLocaleDateString('en-US', {month: '2-digit', day: '2-digit', year: 'numeric'}) : null;
     
+    
+
     const jwt = isLogged()
 
     const recentItem = (id , topic) => {
@@ -42,10 +50,16 @@ function ProfileSidebar({user , userId , following , handleButtonClick }) {
                                 marginLeft:'5px' }}  className=''>edite</button>
             </Link>
 
-                <button style={{backgroundColor:'RGB(136 ,28 ,21, 0.5)' , 
-                borderRadius:'5px' , 
-                padding:'1px 10px' , 
-                marginLeft:'5px' }} >delete</button>
+                <button
+                        onClick={() => {
+                                        disptach(deleteUser(user && userId , jwt.token))
+                                        disptach({type : userTypes.DELETE})   } }
+                        style={
+                            {backgroundColor:'RGB(136 ,28 ,21, 0.5)' , 
+                            borderRadius:'5px' , 
+                            padding:'1px 10px' , 
+                            marginLeft:'5px' }} 
+                >delete</button>
         </div>) : <FollowButton 
                         handleButtonClick={handleButtonClick}
                         following={following} 

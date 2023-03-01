@@ -14,7 +14,7 @@ export default function Register() {
         password : ''
     })
 
-    const {userError , userSucces} = useSelector(state => state.user)
+    const {userError , userSucces , LogandReg , log} = useSelector(state => state.user)
 
     const [error , setError] = useState(null) ;
     const [succes , setSucces] = useState(false)
@@ -29,11 +29,13 @@ export default function Register() {
         if(userError && userError !== null) {
             setError(userError)
         }
-        if(userSucces){
-            setSucces(userSucces)
+        if(LogandReg){
+            setSucces(log)
             dispatch({ type: userTypes.AUTH })
         }
-    } , [userError , userSucces , dispatch])
+
+        
+    } , [userError , LogandReg , dispatch])
     
     const handleInputChange = (e) => {
         setUser({
@@ -48,16 +50,19 @@ export default function Register() {
 
     const Navigate = useNavigate()
     const redirectUser = () => {
-        return ( succes &&
-        Navigate('/') )
+        return ( log &&
+            Navigate('/') )
     }
 
-    console.log(succes && succes)
+    console.log(succes)
+
+
 
     const handleFormSubmit = (e) => {
         e.preventDefault() ;
 
         dispatch(login(user))
+        
     }
 
   return (

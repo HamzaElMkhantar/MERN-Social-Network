@@ -6,7 +6,7 @@ import Nabvbar from './components/Nabvbar';
 import Register from './pages/Register';
 import Login from './pages/Login'
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { authCheck } from './redux/actions/userAction';
 import User from './pages/Users';
@@ -18,8 +18,11 @@ function App() {
   const {currentUser} = useSelector(state => state.user)
   const dispatch = useDispatch() ;  
 
+
+
   useEffect(() => {
-    dispatch(authCheck() )
+    
+    dispatch(authCheck())
   } , [dispatch])
 
   return (

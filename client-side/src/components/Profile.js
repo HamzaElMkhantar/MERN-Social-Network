@@ -1,8 +1,8 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { Link, Navigate, useParams } from 'react-router-dom'
-import { checkAuth, isLogged } from '../hepers/auth'
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
+import { checkAuth, isLogged , logOut } from '../hepers/auth'
 import { getUser } from '../redux/actions/userAction'
 import InputOption from './InputOption'
 import ProfileSidebar from './ProfileSidebar'
@@ -14,11 +14,15 @@ function Profile() {
   const {userId} = useParams()
   const [error , setError] = useState('')
   const [user , setUser] = useState(null) 
+  const [loading , setLoading] = useState(true)
+
   const jwt = isLogged() ;
   const [following, setFollowing] = useState(false) 
 
+  const{deleteUser} = useSelector(state => state.user)
   
- 
+ const navigate = useNavigate()
+  
   useEffect( () => {
     async function getProfile(){
       const userData = await getUser(userId , jwt && jwt.token)
@@ -38,8 +42,21 @@ function Profile() {
       return match ;
     }
 
-    getProfile() ;
-  } , [userId , jwt]) ;
+    if(loading){
+
+      getProfile() ;
+    }
+
+    if(deleteUser){
+      logOut( () => {
+        return <Navigate to={"/"} />
+      })
+    }
+
+    return () => {
+      setLoading(false)
+    }
+  } , [userId , navigate , jwt]) ;
 
   
 
@@ -83,7 +100,7 @@ const recentItem = (index , userId , topic) => {
                         borderRadius:'50%'
                       }} 
                       className='sidebar-hashtag' 
-                      src={`http://localhost:4500/api/user/photo/${userId}?&{new Date().getTime()}`} 
+                      src={`http://localhost:4500/api/user/photo/${userId}?${new Date().getTime()}`} 
                       alt={topic.name} />}
             <p className='sidebar0topic'>{topic && topic.name}</p>
         </div>
@@ -106,7 +123,7 @@ const recentItem = (index , userId , topic) => {
           (
             <div className='user-header-container'>
                 <div  className='user-header-image-container'>
-                    <img  src={`http://localhost:4500/api/user/photo/${userId}`} alt="profile-img" />
+                    <img  src={`http://localhost:4500/api/user/photo/${userId}?${new Date().getTime()}`} alt="profile-img" />
                     
                 </div>
             <div className='user-header-info-container'>

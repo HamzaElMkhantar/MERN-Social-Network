@@ -1,10 +1,15 @@
+import { Navigate } from "react-router-dom";
 import userTypes from "../../types/userType";
 
 const initialState = {
     currentUser : null ,
     users : [] ,
     userError : null ,
-    userSucces : false
+    userSucces : false ,
+    deleteUser : false ,
+    LogandReg : false ,
+    register : false ,
+    log : false
 }
 const userReducer = ( state = initialState  , action) => {
     switch(action.type) {
@@ -18,24 +23,34 @@ const userReducer = ( state = initialState  , action) => {
                 ...state ,
                 currentUser : action.payload ,
                 userSucces : true,
-                userError : null
+                userError : null ,
+                // LogandReg : true ,
+                register : false ,
+                log : true
             }
         case userTypes.REGISTER :
             return {
                 ...state , 
-                userSucces : true
+                userSucces : true ,
+                register: true ,
+                
             }
-        case userTypes.CHECK_AUTH :
-            return {
-                ...state ,
-                currentUser : action.payload   ,
-                userSucces : true
+            case userTypes.CHECK_AUTH :
+                return {
+                    ...state ,
+                    currentUser : action.payload   ,
+                    userSucces : true ,
+               
+                
             }
         case userTypes.SINGOUT :
+            localStorage.remove("jwt")
             return {
                 ...state ,
                 currentUser : null ,
-                userSucces : false
+                userSucces : false ,
+                LogandReg : false ,
+                log : false
             } 
         case userTypes.UPDATE :
             const jwt = JSON.parse(localStorage.getItem("jwt")) ;
@@ -44,13 +59,18 @@ const userReducer = ( state = initialState  , action) => {
             return {
                 ...state ,
                 currentUser : {...state.currentUser , user : action.payload} ,
-                // userSucces : true
+                userSucces : true
             }
         case userTypes.DELETE :
-                const updatedUsers = state.users.filter(user => user._id !== user.payload._id)
+
+                const updatedUsers = state.users.filter(user => user._id !== user.payload.userId)
+                
             return {
                 ...state ,
-                users : updatedUsers
+                users : updatedUsers ,
+                currentUser : null ,
+                deleteUser : true ,
+                userSucces : false
             }
         case userTypes.FOLLOW :
             return {

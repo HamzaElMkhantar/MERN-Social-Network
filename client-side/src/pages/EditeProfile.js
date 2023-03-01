@@ -23,6 +23,7 @@ const  EditeProfile = memo(() =>  {
 
     const [error , setError] = useState(null) ;
     const [succes , setSucces] = useState(false)
+    const [loading , setLoading] = useState(true)
     const dispatch = useDispatch() ;  
     
     const jwt = isLogged() ;
@@ -59,12 +60,17 @@ const  EditeProfile = memo(() =>  {
               setError(error);
             } else if (data) {
               setUser(data);
-              setSucces(true);
+            //   setSucces(true);
             }
           }
         };
       
-        getProfile();
+        if(loading){
+            getProfile();
+        }
+        return () => {
+            setLoading(false)
+        }
       }, [userId]);
 
     useEffect( () => {
@@ -142,6 +148,8 @@ console.log('editing')
           user.about && userData.append('about', user.about);
           user.image && userData.append('image', user.image);
           dispatch(updateUser(userData, userId, jwt && jwt.token));
+
+          
         }
 
   return (

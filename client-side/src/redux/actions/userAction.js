@@ -168,3 +168,27 @@ export const updateUser = (user , userId ,token ) => {
             .catch(err => console.log(err)) ;
     }
 }
+
+export const deleteUser = (userId , token) => {
+    const config = {
+        headers : {
+            Authorization : `bearer ${token}`
+        }
+    }
+
+    return dispatch => axios
+                .delete(`http://localhost:4500/api/users/${userId}` , config)
+                .then(res => {
+                    if(res.data.error) {
+                        return dispatch({
+                            type : "USER_ERROR" ,
+                            payload : res.data.payload
+                        })
+                    }else {
+                        return dispatch ({
+                            type : userTypes.DELETE ,
+                            payload : userId
+                        })
+                    }
+                }).catch(err => console.log(err))
+}
