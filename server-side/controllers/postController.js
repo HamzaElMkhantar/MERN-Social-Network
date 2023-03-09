@@ -1,17 +1,20 @@
 const  Post = require('../models/postModel') ;
 
 const getAllPosts = (req , res) => {
-    Post.find({postedBy : {$in : req.profile.following}})
+    let following = req.profile.following ;
+    // following.push(rea.profile._id)
+    // {postedBy : {$in : req.profile.following}}
+    Post.find()
         .populate('comments' , 'text created')
         .populate("comments.postedBy" , '_id name')
         .populate("postedBy" , '_id name')
         .sort('-createdAt')
         .exec((err , posts) => {
             if(err){
-                res.json({Error : err})
+               return res.json({Error : err})
             }
 
-            res.json(posts) ;
+             res.json(posts) ;
         })
 }
 
@@ -63,25 +66,35 @@ const addPost = (req , res) => {
     })
     post.save((err , data) => {
         if(err){
-            res.json({Error : err}) ;
+            res.json({error : err}) ;
         }
-
+        console.log(data)
         res.send(data)
     }) ;
 }
 
 const deletePost = (req , res) => { 
     let postToDelete = req.post ;
-    postToDelete.remove( (err , deleted) => {
+    postToDelete.remove( (err , postDeleted) => {
         err ? res.json({error : err})
-            : res.json({message : "post deleted"}) ;
+            : res.json(postDeleted) ;
     })
+    // let postId = req.body.postId ;
+    // Post.findByIdAndRemove(postId , (error , res) => {
+    //         if(error){
+    //             return res.json({error : err})
+    //         }else{
+    //             res.json({message:'post deleted' + res})
+    //         }
+    // })
 }
 
 const likePost =  (req , res) => {
+    let postId = req.body.postId
+    let userId = req.body.userId
     Post.findByIdAndUpdate(
-            req.body.postId , 
-            {$push : {likes : req.body.userId} } , 
+            postId , 
+            {$push : {likes : userId} } , 
             {new : true}
                 ).exec( (err , newPost) => {
                 err ? res.json({error : err})
@@ -103,10 +116,14 @@ const unLikePost = (req , res) => {
 const addComment = (req , res) => {
     let comments = {text : req.body.text} ;
     comments.postedBy = req.body.userId ;
+    let postId = req.body.postId
 
-    Post.findByIdAndUpdate(req.body.postId , {$push : {comments : comments}} , {new : true})
+    Post.findByIdAndUpdate(
+            postId ,
+            {$push : {comments : comments}} ,
+            {new : true})
         .exec( (err , comment) => {
-            if(err) res.json({error : err}) ;
+            if(err) return res.json({error : err}) ;
 
             res.json(comment) ;
         })
@@ -115,10 +132,10 @@ const addComment = (req , res) => {
 const deleteComment = (req , res) => {
     let commentId = req.body.commentId
     Post.findByIdAndUpdate(req.body.postId , {$pull : { comments : {_id : commentId} }} , {new : true})
-        .exec( (err , deletedComment) => {
-            if(err) res.json({error : err}) ;
+        .exec( (err , comment) => {
+            if(err) return res.json({error : err}) ;
 
-            res.json(deletedComment) ;
+            res.json(comment) ;
         })
 }
 
@@ -134,3 +151,4 @@ module.exports = {
     addComment ,
     deleteComment
 }
+

@@ -4,30 +4,37 @@ const formidable = require('formidable');
 const fs = require('fs') ;
 const bcrypt = require('bcryptjs') ;
 
-const createUser = (req , res) => { 
+const createUser =  async (req , res) => { 
     // req.profile = req.body ;
     const {name , email , password} = req.body ;
+    
+    const exestingUser = await User.findOne({email : req.body.email})
+        if(exestingUser) return res.json({error :'email already exist'})
+
     let hashed_password = null ;
     bcrypt.hash(password , 12 , function(err, hash) {
         // Store hash in your password DB.
         hashed_password = hash ;
 
-        const user = new User({
-            name : name , 
-            email : email ,
-            password : hashed_password
-        }) ;
-        user.save((err , user)=>{
-            if(err){
-                res.json({error : err}) ;
-            }
-            user.password = undefined
-            res.json(user) ;
-  
-        })
+
+                const user = new User({
+                    name : name , 
+                    email : email ,
+                    password : hashed_password
+                }) ;
+              
+                user.save((err , user)=>{
+                    if(err){
+                        console.log('error : ' + err)
+                       return  res.json({error : err}) ;
+                    }
+                    console.log('user : ' + user)
+                    user.password = undefined
+                    return res.json(user) ;
+          
+                })
+
     });
-
-
 }
 
 const getUserById = (req , res , next , id) => {
@@ -95,7 +102,7 @@ const updateUser = (req , res) => {
             if(err) return res.json({error : err})
             updatedUser.password = undefined ;
             updatedUser.image = undefined ;
-            res.json(updatedUser)
+            return res.json(updatedUser)
         })
     })
 }
@@ -115,7 +122,8 @@ const getUserPhoto = (req , res) => {
          res.send(req.profile.image.data)
 
     }else {
-         res.sendFile("/Users/hamza/Desktop/All\ Items/myTweet-MERN/server-side/images/userImg.jpeg") ;
+         res.sendFile("/Users/hamza/Desktop/All\ Items/MERN-Social-Network/server-side/images/userImg.jpeg") ;
+      
     }
 }
 

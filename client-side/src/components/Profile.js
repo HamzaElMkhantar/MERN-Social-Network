@@ -1,10 +1,13 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { checkAuth, isLogged , logOut } from '../hepers/auth'
+import { userPosts } from '../redux/actions/postAction'
 import { getUser } from '../redux/actions/userAction'
 import InputOption from './InputOption'
+import Post from './Post'
+import PostList from './PostList'
 import ProfileSidebar from './ProfileSidebar'
 
 
@@ -15,22 +18,29 @@ function Profile() {
   const [error , setError] = useState('')
   const [user , setUser] = useState(null) 
   const [loading , setLoading] = useState(true)
+  const [PostByUser , sendBtnPostByUser] = useState([])
 
   const jwt = isLogged() ;
   const [following, setFollowing] = useState(false) 
 
-  const{deleteUser} = useSelector(state => state.user)
+  const{deleteUser , userUpdate} = useSelector(state => state.user)
+  const {userPost , postError} = useSelector(state => state.post)
   
  const navigate = useNavigate()
-  
+
+ console.log(postError)
+  const dispatch = useDispatch()
   useEffect( () => {
+    
     async function getProfile(){
+      
       const userData = await getUser(userId , jwt && jwt.token)
       if(userData.error){
         setError(userData.error)
       }else{
         setUser(userData.data)
         setFollowing(checkFollow(userData.data))
+
       }
     }
 
@@ -47,17 +57,21 @@ function Profile() {
       getProfile() ;
     }
 
-    if(deleteUser){
-      logOut( () => {
-        return <Navigate to={"/"} />
-      })
-    }
+    const loadUserPosts = () => {
+      dispatch(userPosts(jwt && jwt.token , userId))
+    } 
+    loadUserPosts()
 
     return () => {
+      
       setLoading(false)
     }
-  } , [userId , navigate , jwt]) ;
-
+  } , [userId , navigate, jwt , userPosts , userPost]) ;
+  console.log(userPost)
+  
+  if(userUpdate){
+    dispatch({type : 'restore_info'})
+  }
   
 
   const  handleButtonClick = (user) => {
@@ -116,72 +130,111 @@ const recentItem = (index , userId , topic) => {
  
   return (
 
-    <div style={{marginTop: '90px' , position:'relative'}} 
-    className='container' >
+    <div style={{marginTop: '90px' }} 
+         className='container' >
         {
           error ? showError() : 
           (
-            <div className='user-header-container'>
-                <div  className='user-header-image-container'>
-                    <img  src={`http://localhost:4500/api/user/photo/${userId}?${new Date().getTime()}`} alt="profile-img" />
-                    
-                </div>
-            <div className='user-header-info-container'>
-            <div  className='feedComp'>
+            <div>
+                  <div  className='user-header-container'>
+                      <div  className='user-header-image-container'>
+                          <img  src={`http://localhost:4500/api/user/photo/${userId}?${new Date().getTime()}`} alt="profile-img" />
+                          
+                      </div>
+                  <div className='user-header-info-container'>
+                  <div  className='feedComp'>
 
-            <div className='feed'>
-                <div>
-                <div className='feed-inputConteiner'>
-        
-                    <img className='monAvatar' src={`http://localhost:4500/api/user/photo/${userId}`} />
+                  <div className='feed'>
+                      <div>
+                      <div className='feed-inputConteiner'>
+              
+                          <img className='monAvatar' src={`http://localhost:4500/api/user/photo/${userId}?${new Date().getTime()}`} />
+                        
+                          <div className='feed-form'>
+                          <svg  xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                              <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
+                            </svg>
+                              <form>
+                                  <input style={{borderLeft:'1px solid lightGray' , marginLeft:'10px' , backgroundColor: 'rgba(246, 246, 246, 0)'}}   placeholder='Post'/>
+                                  <button className='sendBtnPost' onClick={'sendPost'} name="input" type='submit'>Send</button>
+                              </form>
+                          </div>
+                          
+                      </div>
+                      <div className='feed-inputOption'>
+                        <InputOption Icon={photoIcont} title="Photo" color="#378fe9" />
+                        <InputOption Icon={videoIcon} title="Video" color="#5f9a41" />
+                        <InputOption Icon={eventIcon} title="Event" color="#c37d17" />
+                        <InputOption Icon={feedIcon} title="Write Article" color="#e16744" />
+                      </div>
+              
+                      </div>
+                  </div>
+              
+                  </div>
+                  </div>
+             
                   
-                    <div className='feed-form'>
-                    <svg  xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
-                        <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
-                      </svg>
-                        <form>
-                            <input style={{borderLeft:'1px solid lightGray' , marginLeft:'10px'}}   placeholder='Post'/>
-                            <button className='sendBtnPost' onClick={'sendPost'} name="input" type='submit'>Send</button>
-                        </form>
-                    </div>
-                    
-                </div>
-                <div className='feed-inputOption'>
-                <InputOption Icon={photoIcont} title="Photo" color="#378fe9" />
-                <InputOption Icon={videoIcon} title="Video" color="#5f9a41" />
-                <InputOption Icon={eventIcon} title="Event" color="#c37d17" />
-                <InputOption Icon={feedIcon} title="Write Article" color="#e16744" />
-                </div>
-        
-                </div>
+                  </div>
+                   
             </div>
-        
-            </div>
-            </div>
-            
-        </div>)
+            )
         }
+{
 
-        {
-          <ProfileSidebar 
-                handleButtonClick={handleButtonClick}
-                userId={userId} 
-                user={user && user}
-                following={following} />
-        }
-        <div className='follow-sidebar'>
-            <h2>Following</h2>
-            <hr />
-            <div style={{textAlign:'center' , fontSize:'13px !important' }} className='follow-sidebar-content'>
-              {
-                followingList && followingList.length  > 0 ? followingList : "there no following " 
-              }
-          
-            </div>
-            
-        </div>
-        
+  <div style={{display:'flex' , marginTop:'10px' , flexWrap :'wrap'}} className='profileContent'>
+     <div style={{flex:'0.2'}} className=''>
+     <ProfileSidebar 
+                      
+                   handleButtonClick={handleButtonClick}
+                   userId={userId} 
+                   user={user && user}
+                   following={following} />
+     </div>
+     <div style={{ flex:'0.6'}} className=''>
+       <PostList posts={userPost && userPost} />
+     </div>
+     <div style={{ flex:'0.2' }} className='px-1'>
+     <div className='follow-sidebar'>
+              <h2>Following</h2>
+              <hr />
+              <div  className='follow-sidebar-content'>
+                {
+                  followingList && followingList.length  > 0 ? followingList : "there no following " 
+                }
+              </div>
+          </div>
+     </div>
     
+  </div>
+        // <div  className='profileContent'>
+        //     {
+        //       <div className=''>
+        //         <ProfileSidebar 
+                      
+        //               handleButtonClick={handleButtonClick}
+        //               userId={userId} 
+        //               user={user && user}
+        //               following={following} />
+        //       </div>
+        //     }
+        //     <div  className='profilePsotContent'>
+        //        <PostList posts={userPost && userPost} />
+        //     </div>
+
+        //     <div className='follow-sidebar'>
+        //         <h2>Following</h2>
+        //         <hr />
+
+        //         <div  className='follow-sidebar-content'>
+        //           {
+        //             followingList && followingList.length  > 0 ? followingList : "there no following " 
+        //           }
+        //         </div>
+        //     </div>
+        // </div>
+      }
+
     </div>
   )
 }

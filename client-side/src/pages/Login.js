@@ -34,18 +34,24 @@ export default function Register() {
             dispatch({ type: userTypes.AUTH })
         }
 
+        // if(error) {
+
+        //     return () => dispatch({type:"HIDE_USER_ERROR"})
+        // }
         
-    } , [userError , LogandReg , dispatch])
+    } , [userError , error , LogandReg , dispatch])
     
     const handleInputChange = (e) => {
+  
         setUser({
             ...user ,
             [e.target.name] : e.target.value
         })
+        dispatch({type:"HIDE_USER_ERROR"})
     }
 
     const showError = () => {
-            return userError && <div className='alert alert-danger text-center'>{userError}</div>
+            return userError && <div className='alert alert-danger text-center'>{error}</div>
     }
 
     const Navigate = useNavigate()
@@ -79,7 +85,7 @@ export default function Register() {
                             type="email" 
                             name="email"
                             placeholder='Email'
-                            value={user.email}
+                            value={user.email && user.email}
                             required
                             onChange={e => handleInputChange(e)}
                             className="form-control"   />
@@ -89,15 +95,14 @@ export default function Register() {
                             type="password" 
                             name="password"
                             placeholder='Password'
-                            value={user.password}
+                            value={user.password && user.password}
                             required
                             onChange={e => handleInputChange(e)}
                             className="form-control"   />
                     </div>
                     <div className='form-group mx-auto mt-3'>
                         <button
-                        
-                            
+                            // onClick={() => dispatch({type : "HIDE_USER_ERROR"})}
                             style={ {
                                 width : '120px' ,
                                 border: '0',

@@ -38,14 +38,17 @@ export const createUser = (user) => {
             .post("http://localhost:4500/api/users/create" , user)
             .then(res => {
                 if(res.data.error){
+                    console.log(res.data)
                     dispatch({
                         type : "USER_ERROR" ,
                         payload : res.data.error
                     })
+                    console.log(res.data.error)
                 }else {
+                  
                     dispatch({
                         type: userTypes.REGISTER ,
-                        payload : res.data
+               
                     })
                 }
             })
@@ -180,11 +183,13 @@ export const deleteUser = (userId , token) => {
                 .delete(`http://localhost:4500/api/users/${userId}` , config)
                 .then(res => {
                     if(res.data.error) {
+                        console.log(res)
                         return dispatch({
                             type : "USER_ERROR" ,
                             payload : res.data.payload
                         })
                     }else {
+                        console.log(res)
                         return dispatch ({
                             type : userTypes.DELETE ,
                             payload : userId

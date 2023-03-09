@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch , connect, useSelector } from 'react-redux'
+import { useDispatch , connect, useSelector  } from 'react-redux'
 import { createUser } from '../redux/actions/userAction';
-import { Navigate } from 'react-router-dom';
+import { Navigate , useNavigate } from 'react-router-dom';
 import userTypes from '../redux/types/userType';
 
 
@@ -20,7 +20,7 @@ export default function Register() {
     const [succes , setSucces] = useState(false)
     const dispatch = useDispatch() ;  
     
-
+console.log(userError)
     useEffect( () => {
         if(userError && userError !== null) {
             setError(userError)
@@ -29,21 +29,29 @@ export default function Register() {
             setSucces(LogandReg)
             // dispatch({type:"TOGGEL_SUCCES"}) 
         }
-    } , [userError , userSucces , dispatch])
+
+        // if(error) {
+
+        //     return () => dispatch({type:"HIDE_USER_ERROR"})
+        // }
+    } , [userError , error , userSucces , dispatch , LogandReg])
 
     const showError = () => {
         return error && <div className='alert alert-danger'>{error}</div>
     }
 
+    const navigate = useNavigate()
     const redirectUser = () => {
-        return register && <Navigate to='/login' />
+        return register && navigate('/login')
     }
 
     const handleInputChange = (e) => {
+   
         setUser({
             ...user ,
             [e.target.name] : e.target.value
         })
+        dispatch({type:"HIDE_USER_ERROR"})
     }
 
     const handleFormSubmit = (e) => {
@@ -65,7 +73,7 @@ export default function Register() {
                             type="text" 
                             name="name"
                             placeholder='Full Name'
-                            value={user.name}
+                            value={user && user.name}
                             required
                             onChange={e => handleInputChange(e)}
                             className="form-control"   />
@@ -75,7 +83,7 @@ export default function Register() {
                             type="email" 
                             name="email"
                             placeholder='Email'
-                            value={user.email}
+                            value={user && user.email}
                             required
                             onChange={e => handleInputChange(e)}
                             className="form-control"   />
@@ -85,14 +93,14 @@ export default function Register() {
                             type="password" 
                             name="password"
                             placeholder='Password'
-                            value={user.password}
+                            value={user && user.password}
                             required
                             onChange={e => handleInputChange(e)}
                             className="form-control"   />
                     </div>
                     <div className='form-group mx-auto mt-3'>
                         <button 
-                            onClick={ () => dispatch()}
+                            // onClick={() => dispatch({type : "HIDE_USER_ERROR"})}
                             style={ {
                                 width : '120px' ,
                                 border: '0',

@@ -5,7 +5,9 @@
   
 }
 body{
-  background-image: linear-gradient(90deg, #ededed, #ebebf1, #e8e9f6, #e3e7fa, #dde6ff);
+  background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(12, 35, 152, 0.565) 150%);
+  /* background-image: linear-gradient(90deg, #ededed, #ebebf1, #e8e9f6, #e3e7fa, #dde6ff); */
+
 }
 .navbar {
   border-bottom: 1px solid rgba(2, 7, 70, 0.2);
@@ -155,17 +157,20 @@ body:has(.dorpdownList:hover) .dorpdownList {
     border-radius: 10px;
     align-items: center;
     justify-content: center;
+    flex: 0.2;
     /* background-color: red; */
 
 }
 
 .user-header-image-container {
-  width: 250px;
+  /* width: 250px; */
   height: 210px;
   border-radius: 10px;
   overflow: hidden;
   margin-right: 5px;
+  flex: 0.2;
   border: 1px solid rgb(234, 234, 234);
+
 }
 .user-header-image-container img {
   width: 100%;
@@ -173,14 +178,15 @@ body:has(.dorpdownList:hover) .dorpdownList {
   object-fit: cover;
 }
 .user-header-info-container {
-  background-color: rgb(246, 246, 246) ; 
+  background-color: rgba(246, 246, 246, 0.5) ; 
   height: 210px;
-  width: calc(100% - 255px);
+  /* width: calc(100% - 255px); */
+  flex: 0.8;
   min-width: 400px;
   border-radius: 10px;
   overflow: hidden;
   padding: 30px;
-  border: 1px solid rgb(234, 234, 234);
+  border: 1px solid rgba(196, 196, 196, 0.365);
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -230,13 +236,10 @@ body:has(.dorpdownList:hover) .dorpdownList {
 
 .sidebar {
   margin-top: 5px;
-  position: absolute;
   display: flex;
   flex-direction: column;
-  width: 250px;
-
-
-
+  width: 100% ;
+  
 }
 
 /* sidebar top  */
@@ -249,7 +252,7 @@ body:has(.dorpdownList:hover) .dorpdownList {
   justify-content: center;
   align-items: center;
   border-radius: 10px;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.5);
   padding-bottom: 10px;
   margin-bottom: 10px;
   border: 1px solid lightgray;
@@ -310,7 +313,7 @@ body:has(.dorpdownList:hover) .dorpdownList {
 
 /* sidebar bottom  */
 .sidebar-buttom {
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.5);
   padding: 5px 0px;
   border-radius: 10px;
   border: 1px solid lightgray;
@@ -354,7 +357,7 @@ body:has(.dorpdownList:hover) .dorpdownList {
 }
 
 .feed{
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.231);
   height: 100%;
   width: 100%;
   border-radius: 10px;
@@ -381,7 +384,7 @@ body:has(.dorpdownList:hover) .dorpdownList {
 .feed-form {
   display: flex;
   align-items: center;
-  /* background-color: red; */
+
   width: 100%;
   border: 1.5px solid rgb(164, 163, 163);
   border-radius: 30px;
@@ -429,6 +432,8 @@ body:has(.dorpdownList:hover) .dorpdownList {
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
+  /* background-color: red; */
+  width: 20%;
 }
 
 .inputOption:hover {
@@ -459,14 +464,13 @@ body:has(.dorpdownList:hover) .dorpdownList {
   width: 250px;
   display: flex;
   flex-direction: column;
-  position: absolute;
-  right:10px;
-  margin-top: 10px;
+  /* position: absolute; */
+  /* right:10px; */
+  /* margin-top: 10px; */
   justify-content: center;
   align-items: center;
   border-radius: 10px;
-  background-color: white;
-  /* padding: 10px; */
+  background-color: rgba(255, 255, 255, 0.5);
   border: 1px solid lightgray;
   overflow: hidden;
 }
@@ -478,10 +482,202 @@ body:has(.dorpdownList:hover) .dorpdownList {
 }
 
 .follow-sidebar-content {
+  /* background-color: red; */
   width: 100%;
   max-height: 300px;
   overflow-y:scroll;
   position: relative;
   padding: 5px;
   font-size: 7px !important;
+}
+
+.profileContent{
+  display: flex;
+}
+
+/* post style */
+.post{
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 10px;
+  flex: 0.5;
+  border-radius: 10px;
+  border: 1px solid lightgray;
+  /* width: 600px; */
+  /* min-width: 300px; */
+}
+
+.postHeader {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  border-bottom: 1px solid lightgray ;
+  padding-bottom: 7px;
+  width: 100%;
+
+}
+.postHeader .post-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 15px;
+  object-fit: cover;
+}
+.postHeader .post-date {
+  color: gray;
+  font-size: 13px;
+}
+.postContent{
+  padding: 10px;
+  width: 100%;
+}
+
+.comments-likes{
+  background-color: rgba(0, 68, 255, 0.173);
+  border-radius: 10px;
+  border: 1px solid rgb(166, 166, 166);
+  padding: 0px 5px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.like-comment-icons{
+  display: flex;
+  flex:1;
+  width: 600px;
+  min-width: 300px;
+ 
+}
+.heart-comment-content{
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  margin: 5px 0px;
+  border: 1px solid rgb(145, 216, 239);
+  border-radius: 10px;
+  padding: 5px 10px;
+  margin-left: 15px;
+  transition: all .5s ease;
+  cursor: pointer;
+
+}
+
+.heart-comment-content p {
+  margin-left: 5px;
+}
+.heart-comment {
+  display: flex;
+  align-items: center;
+}
+
+.heart-comment-content:hover {
+  background-color: #0088d1;
+}
+
+.heartSvgIcon {
+  color: rgb(46, 46, 46);
+}
+
+.comments-text{
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgb(158, 158, 158);
+  background-color: rgb(254, 254, 254);
+  border-radius: 10px;
+  margin-bottom: 5px;
+  padding: 5px 15px;
+  /* cursor: pointer; */
+  height: 0px;
+  display: none;
+  visibility: hidden;
+  transition: all 0.5s ease;
+  position: relative;
+
+}
+
+/* body:has(.heart-comment-content.comments:hover) .comments-text{
+  display: block;
+  visibility: visible;
+  height: 100%;
+  transition: all 0.5s ease;
+} */
+
+.comments-text div{
+  font-size: 13px;
+  margin: 5px;
+  border-radius: 10px;
+  /* padding: 0px 10px; */
+  /* border: 1px solid lightgray; */
+}
+/* .comment_form{
+  padding: 0;
+  margin: 0;
+} */
+.comments-text .comment_form form {
+  padding: 10px;
+  background-color: #00395724;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.comments-text .comment_form form .comment_input {
+  width: 100%;
+  height: 35px;
+  border-radius: 5px;
+  padding: 0 10px;
+  outline: 0;
+  font-size: 14px;
+}
+
+.commentFormImg {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid whitesmoke;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.comment-input-container{
+  background-color: rgba(255, 255, 255, 1);
+  
+}
+
+.deleteComment {
+  border-radius: 5px;
+  border: 1px solid #0088d1;
+  padding: 2px 5px;
+  color: #0088d1;
+  transition: all .3s ease;
+}
+
+.deleteComment:hover {
+  background-color: #0088d1;
+  color: whitesmoke;
+}
+
+.userComment{
+  background-color: #00395724;
+  padding: 2px 10px;
+  color: rgb(45, 45, 45);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+}
+
+.userComment div {
+  font-size: 14px !important;
+  display: flex;
+  /* align-items: center; */
+
+}
+.comment-deleteBtn {
+  /* background-color: #0088d1; */
+  border-radius: 10px;
+  border:  1 px solid #0088d1 ;
 }

@@ -7,7 +7,7 @@ import { getUser, updateUser } from '../redux/actions/userAction';
 import userTypes from '../redux/types/userType';
 
 
-const  EditeProfile = memo(() =>  {
+const  EditeProfile = () =>  {
 
     const {userId} = useParams() ;
 
@@ -28,30 +28,12 @@ const  EditeProfile = memo(() =>  {
     
     const jwt = isLogged() ;
 
-    const {userError , userSucces} = useSelector(state => state.user)
-    console.log(userError)
-    console.log(userSucces)
-    console.log(succes)
-    console.log(user)
-    console.log(jwt)
-    console.log(userId)
+    const {userError , userSucces , userUpdate} = useSelector(state => state.user)
     
-    let navigate = useNavigate()
+    var navigate = useNavigate()
 
-    // useEffect( () => {
-    //     const getProfile = async () => {
-    //         const userData = await getUser(userId , jwt && jwt.token) ;
-    //         if(userData.error){
-    //             setError(userData.error)
-    //         }else if(userData) {
-    //             setUser(userData.data)
-    //             setSucces(true)
-    //         }
+    
 
-    //     }
-        
-    //     getProfile() ;
-    // } , [jwt , userId , setSucces])
     useEffect(() => {
         const getProfile = async () => {
           if (jwt && userId) {
@@ -75,82 +57,68 @@ const  EditeProfile = memo(() =>  {
 
     useEffect( () => {
         
-        if(succes){
-            // navigate(`/user/${user && user._id}`)
-            dispatch({type:"TOGGEL_SUCCES"})
-        }
         if(error){
             setError(userError)
             
         }
         
-    } , [   user , navigate , dispatch])
-
-   
-
-console.log('editing')
+        if(!checkAuth(userId)){
+            navigate(`/user/${user && userId}`) 
+        }
+        
+        
+    } , [  userUpdate , user , navigate , dispatch])
+    
+    if(userUpdate){
+        
+        navigate(`/user/${user && userId}`)
+        // dispatch({type:"TOGGEL_SUCCES"})
+    }
+    
     // const redirectUser = () => {
-    //     if(succes){
-    //         navigate(`/user/${user && user._id}`)
-    //     }
+        
+        // }
+            // if(userUpdate){
+            //     navigate(`/user/${jwt && jwt.user._id}`)
+            // }
+    // redirectUser()
 
-    // }
+    // console.log(userUpdate)
     // const redirectUser = useCallback(() => {
     //     if (succes) {
     //       navigate(`/user/${user && user._id}`);
     //     }
     //   }, [succes, user, navigate]);
     
-    if(!checkAuth(userId)){
-        navigate(`/user/${userId}`) 
-        console.log("hello updt")
-    }
+  
     
 
-    // const handleInputChange = (e) => {
-    //     const value = e.target.name === "image"
-    //                     ? e.target.files[0] : e.target.value
-    //     setUser({
-    //         ...user ,
-    //         [e.target.name] : value
-    //     })
-    // }
+    const handleInputChange = (e) => {
+        const value = e.target.name === "image"
+                        ? e.target.files[0] : e.target.value
+        setUser({
+            ...user ,
+            [e.target.name] : value
+        })
+    }
 
-    const handleInputChange = 
-        (e) => {
-          const value =
-            e.target.name === 'image' ? e.target.files[0] : e.target.value;
-          setUser({
-            ...user,
-            [e.target.name]: value,
-          });
-        }
 
-    // const handleFormSubmit = (e) => {
-    //     e.preventDefault() ;
-    //     user.name && userData.append("name" , user.name)
-    //     user.email && userData.append("email" , user.email)
-    //     user.password && userData.append("password" , user.password)
-    //     user.about && userData.append("about" , user.about)
-    //     user.image && userData.append("image" , user.image)
-
-    //     dispatch(updateUser(userData  , userId , jwt && jwt.token))
-        
-    //     redirectUser()
-    // }
     const handleFormSubmit =
         (e) => {
           e.preventDefault();
           const userData = new FormData();
           user.name && userData.append('name', user.name);
           user.email && userData.append('email', user.email);
-          user.password && userData.append('password', user.password);
+        //   user.password && userData.append('password', user.password);
           user.about && userData.append('about', user.about);
           user.image && userData.append('image', user.image);
           dispatch(updateUser(userData, userId, jwt && jwt.token));
 
+        //   dispatch({type: userTypes.UPDATE})
           
         }
+
+    
 
   return (
     <div style={{paddingTop: '40px'}} className='container'>
@@ -166,7 +134,7 @@ console.log('editing')
                         <img 
                             style={{width:'100%' , height:'100%'}}
                             alt={user && user.name}
-                            src={`http://localhost:4500/api/user/photo/${userId}`} />
+                            src={`http://localhost:4500/api/user/photo/${userId}?${new Date().getTime()}`} />
                     </div>
                     <div className='form-group py-1'>
                         <input 
@@ -188,16 +156,18 @@ console.log('editing')
                             onChange={e => handleInputChange(e)}
                             className="form-control"   />
                     </div>
-                    <div className='form-group pb-1'>
-                        <input 
-                            type="password" 
-                            name="password"
-                            placeholder='Password'
-                            value={user.password || ""}
-                            required
-                            onChange={e => handleInputChange(e)}
-                            className="form-control"   />
-                    </div>
+                   {
+                    //  <div className='form-group pb-1'>
+                    //     <input 
+                    //         type="password" 
+                    //         name="password"
+                    //         placeholder='Password'
+                    //         value={user.password || ""}
+                    //         required
+                    //         onChange={e => handleInputChange(e)}
+                    //         className="form-control"   />
+                    // </div>
+                }
                     <div className='form-group pb-1'>
                         <textarea
                             style={{height:'150px'}}
@@ -213,7 +183,6 @@ console.log('editing')
                     </div>
                     <div style={{width:'250px'}} className='mx-auto form-group pb-1'>
                         <input 
-                            
                             type="file" 
                             name="image"
                             accept='image/*'
@@ -239,6 +208,6 @@ console.log('editing')
         </div>
     </div>
   )
-})
+}
 
 export default EditeProfile ;

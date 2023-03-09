@@ -6,12 +6,16 @@ const initialState = {
     users : [] ,
     userError : null ,
     userSucces : false ,
-    deleteUser : false ,
+    deletedUser : false ,
     LogandReg : false ,
     register : false ,
-    log : false
+    log : false ,
+    userUpdate : false
 }
+
+
 const userReducer = ( state = initialState  , action) => {
+    
     switch(action.type) {
         case userTypes.GET_USERS :
             return {
@@ -26,13 +30,16 @@ const userReducer = ( state = initialState  , action) => {
                 userError : null ,
                 // LogandReg : true ,
                 register : false ,
-                log : true
+                log : true ,
+                deleteUser : false
             }
         case userTypes.REGISTER :
             return {
                 ...state , 
                 userSucces : true ,
-                register: true ,
+                register: true , 
+                deleteUser : false ,
+                userError : action.payload
                 
             }
             case userTypes.CHECK_AUTH :
@@ -44,32 +51,39 @@ const userReducer = ( state = initialState  , action) => {
                 
             }
         case userTypes.SINGOUT :
-            localStorage.remove("jwt")
+            localStorage.removeItem("jwt")
             return {
                 ...state ,
                 currentUser : null ,
                 userSucces : false ,
                 LogandReg : false ,
-                log : false
+                log : false ,
+                deletedUser : false
             } 
         case userTypes.UPDATE :
-            const jwt = JSON.parse(localStorage.getItem("jwt")) ;
-            const newJwt = {...jwt , user : action.payload} 
-            localStorage.setItem("jwt" , JSON.stringify(newJwt)) ;
+            
             return {
                 ...state ,
                 currentUser : {...state.currentUser , user : action.payload} ,
-                userSucces : true
+                userSucces : true ,
+                userUpdate : true ,
+                updatFun : () => {
+                    const jwt = JSON.parse(localStorage.getItem("jwt")) ;
+                    const newJwt = {[jwt.user] : action.payload}
+                    jwt = {...jwt , newJwt}
+                    localStorage.setItem("jwt" , JSON.stringify(newJwt)) ;
+                    state.updatFun()
+                }
             }
         case userTypes.DELETE :
 
-                const updatedUsers = state.users.filter(user => user._id !== user.payload.userId)
+                const updatedUsers = state.users.filter(user => user._id !== action.payload.userId)
                 
             return {
                 ...state ,
                 users : updatedUsers ,
                 currentUser : null ,
-                deleteUser : true ,
+                deletedUser : true ,
                 userSucces : false
             }
         case userTypes.FOLLOW :
@@ -84,11 +98,22 @@ const userReducer = ( state = initialState  , action) => {
             return {
                 ...state ,
                 userError : action.payload
-            }
+            } 
+        case "HIDE_USER_ERROR" :
+            return {
+                userError : null ,
+                updatedUsers : false
+            } 
+       
+        
         case "TOGGEL_SUCCES" :
             return {
                 ...state ,
                 userSucces : !state.userSucces
+            }
+        case "restore_info" :
+            return {
+                userUpdate : false
             }
 
         default :
